@@ -78,7 +78,6 @@ Compliance with local laws and regulations required
 Educational purposes only
 
 📁 Project Structure
-text
 INTERNET-TOOL-V.0.1.6-EN/
 ├── main_en.py      # script
 ├── wordlist/       # Password dictionaries
